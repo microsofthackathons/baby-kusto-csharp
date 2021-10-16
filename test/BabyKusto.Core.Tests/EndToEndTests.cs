@@ -142,6 +142,46 @@ MyTable
         }
 
         [Fact]
+        public void Count_Works()
+        {
+            // Arrange
+            var engine = new BabyKustoEngine();
+            engine.AddGlobalTable("MyTable", GetSampleData());
+            var query = "MyTable | take 2 | count";
+
+            // Act
+            var result = engine.Evaluate(query) as ITableSource;
+
+            // Assert
+            result.Should().NotBeNull();
+            var dumped = result!.DumpToString();
+            dumped.Should().Be(
+                "Count; " + Environment.NewLine +
+                "------------------" + Environment.NewLine +
+                "2; " + Environment.NewLine);
+        }
+
+        [Fact]
+        public void CountAs_Works()
+        {
+            // Arrange
+            var engine = new BabyKustoEngine();
+            engine.AddGlobalTable("MyTable", GetSampleData());
+            var query = "MyTable | take 2 | count as c";
+
+            // Act
+            var result = engine.Evaluate(query) as ITableSource;
+
+            // Assert
+            result.Should().NotBeNull();
+            var dumped = result!.DumpToString();
+            dumped.Should().Be(
+                "c; " + Environment.NewLine +
+                "------------------" + Environment.NewLine +
+                "2; " + Environment.NewLine);
+        }
+
+        [Fact]
         public void Example1_Works()
         {
             // Arrange

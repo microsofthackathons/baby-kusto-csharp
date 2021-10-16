@@ -9,7 +9,7 @@ using BabyKusto.Core.Extensions;
 var query = @"
 let c=100.0;
 MyTable
-| take 2
+| count
 ";
 
 var engine = new BabyKustoEngine();
