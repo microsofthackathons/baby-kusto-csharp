@@ -9,10 +9,7 @@ using BabyKusto.Core.Extensions;
 var query = @"
 let c=100.0;
 MyTable
-| where AppMachine != 'vm1'
-| project frac=CounterValue/c, AppMachine, CounterName
-| summarize avg(frac) by CounterName
-| project CounterName, avgRoundedPercent=tolong(avg_frac*100)
+| take 2
 ";
 
 var engine = new BabyKustoEngine();

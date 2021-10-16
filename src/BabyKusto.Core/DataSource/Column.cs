@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+using System;
+
 namespace BabyKusto.Core
 {
     public class Column
@@ -18,6 +20,11 @@ namespace BabyKusto.Core
         {
             get => _data[index];
             set => _data[index] = value;
+        }
+
+        public Span<object?> GetSpan(int start, int length)
+        {
+            return _data.AsSpan(start, length);
         }
     }
 }

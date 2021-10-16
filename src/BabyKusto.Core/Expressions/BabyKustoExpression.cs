@@ -127,6 +127,7 @@ namespace BabyKusto.Core.Expressions
                 SyntaxKind.SummarizeOperator => new BabyKustoSummarizeOperator(engine, (SummarizeOperator)expression),
                 SyntaxKind.ProjectOperator => new BabyKustoProjectOperator(engine, (ProjectOperator)expression),
                 SyntaxKind.JoinOperator => new BabyKustoJoinOperator(engine, (JoinOperator)expression),
+                SyntaxKind.TakeOperator => new BabyKustoTakeOperator(engine, (TakeOperator)expression),
 
                 _ => throw new InvalidOperationException($"Unsupported expression kind '{expression.Kind}'."),
             };

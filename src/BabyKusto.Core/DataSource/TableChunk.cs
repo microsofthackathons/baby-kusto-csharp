@@ -1,12 +1,19 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+using System;
+
 namespace BabyKusto.Core
 {
     public class TableChunk : ITableChunk
     {
         public TableChunk(TableSchema schema, Column[] columns)
         {
+            if (schema.ColumnDefinitions.Count != columns.Length)
+            {
+                throw new ArgumentException($"Expected schema and columns to have the same lengths, found {schema.ColumnDefinitions.Count} and {columns.Length}.");
+            }
+
             Schema = schema;
             Columns = columns;
         }

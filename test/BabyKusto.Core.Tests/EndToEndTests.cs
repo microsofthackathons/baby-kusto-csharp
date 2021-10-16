@@ -122,6 +122,26 @@ MyTable
         }
 
         [Fact]
+        public void Take_Works()
+        {
+            // Arrange
+            var engine = new BabyKustoEngine();
+            engine.AddGlobalTable("MyTable", GetSampleData());
+            var query = "MyTable | take 2 | summarize count()";
+
+            // Act
+            var result = engine.Evaluate(query) as ITableSource;
+
+            // Assert
+            result.Should().NotBeNull();
+            var dumped = result!.DumpToString();
+            dumped.Should().Be(
+                "count_; " + Environment.NewLine +
+                "------------------" + Environment.NewLine +
+                "2; " + Environment.NewLine);
+        }
+
+        [Fact]
         public void Example1_Works()
         {
             // Arrange
