@@ -37,6 +37,8 @@ namespace BabyKusto.Core.Evaluation.BuiltIns
                     new ScalarOverloadInfo(new StrcatFunctionImpl(), ScalarTypes.String, ScalarTypes.String, ScalarTypes.String, ScalarTypes.String, ScalarTypes.String),
                     new ScalarOverloadInfo(new StrcatFunctionImpl(), ScalarTypes.String, ScalarTypes.String, ScalarTypes.String, ScalarTypes.String, ScalarTypes.String, ScalarTypes.String)));
 
+            functions.Add(Functions.Strlen, new ScalarFunctionInfo(new ScalarOverloadInfo(new StrlenFunctionImpl(), ScalarTypes.Long, ScalarTypes.String)));
+
             var binFunctionInfo = new ScalarFunctionInfo(
                 new ScalarOverloadInfo(new BinIntFunctionImpl(), ScalarTypes.Int, ScalarTypes.Int, ScalarTypes.Int),
                 new ScalarOverloadInfo(new BinLongFunctionImpl(), ScalarTypes.Long, ScalarTypes.Long, ScalarTypes.Long),

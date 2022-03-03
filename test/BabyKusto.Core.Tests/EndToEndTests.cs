@@ -626,6 +626,48 @@ b-456
         }
 
         [Fact]
+        public void BuiltIns_strlen_Scalar()
+        {
+            // Arrange
+            string query = @"
+print v=strlen('abc')
+";
+
+            string expected = @"
+v:long
+------------------
+3
+";
+
+            // Act & Assert
+            Test(query, expected);
+        }
+
+        [Fact]
+        public void BuiltIns_strlen_Columnar()
+        {
+            // Arrange
+            string query = @"
+datatable(a:string)
+[
+    'a',
+    'abc',
+]
+| project v = strlen(a)
+";
+
+            string expected = @"
+v:long
+------------------
+1
+3
+";
+
+            // Act & Assert
+            Test(query, expected);
+        }
+
+        [Fact]
         public void BuiltIns_bin_Long()
         {
             // Arrange
