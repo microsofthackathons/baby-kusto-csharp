@@ -132,6 +132,19 @@ namespace BabyKusto.Core.Evaluation.BuiltIns
                 Operators.Or,
                 new ScalarFunctionInfo(
                     new ScalarOverloadInfo(new LogicalOrOperatorImpl(), ScalarTypes.Bool, ScalarTypes.Bool, ScalarTypes.Bool)));
+
+            operators.Add(Operators.Contains, new ScalarFunctionInfo(new ScalarOverloadInfo(new ContainsOperatorImpl(), ScalarTypes.Bool, ScalarTypes.String, ScalarTypes.String)));
+            operators.Add(Operators.ContainsCs, new ScalarFunctionInfo(new ScalarOverloadInfo(new ContainsCsOperatorImpl(), ScalarTypes.Bool, ScalarTypes.String, ScalarTypes.String)));
+            operators.Add(Operators.NotContains, new ScalarFunctionInfo(new ScalarOverloadInfo(new NotContainsOperatorImpl(), ScalarTypes.Bool, ScalarTypes.String, ScalarTypes.String)));
+            operators.Add(Operators.NotContainsCs, new ScalarFunctionInfo(new ScalarOverloadInfo(new NotContainsCsOperatorImpl(), ScalarTypes.Bool, ScalarTypes.String, ScalarTypes.String)));
+            operators.Add(Operators.StartsWith, new ScalarFunctionInfo(new ScalarOverloadInfo(new StartsWithOperatorImpl(), ScalarTypes.Bool, ScalarTypes.String, ScalarTypes.String)));
+            operators.Add(Operators.StartsWithCs, new ScalarFunctionInfo(new ScalarOverloadInfo(new StartsWithCsOperatorImpl(), ScalarTypes.Bool, ScalarTypes.String, ScalarTypes.String)));
+            operators.Add(Operators.NotStartsWith, new ScalarFunctionInfo(new ScalarOverloadInfo(new NotStartsWithOperatorImpl(), ScalarTypes.Bool, ScalarTypes.String, ScalarTypes.String)));
+            operators.Add(Operators.NotStartsWithCs, new ScalarFunctionInfo(new ScalarOverloadInfo(new NotStartsWithCsOperatorImpl(), ScalarTypes.Bool, ScalarTypes.String, ScalarTypes.String)));
+            operators.Add(Operators.EndsWith, new ScalarFunctionInfo(new ScalarOverloadInfo(new EndsWithOperatorImpl(), ScalarTypes.Bool, ScalarTypes.String, ScalarTypes.String)));
+            operators.Add(Operators.EndsWithCs, new ScalarFunctionInfo(new ScalarOverloadInfo(new EndsWithCsOperatorImpl(), ScalarTypes.Bool, ScalarTypes.String, ScalarTypes.String)));
+            operators.Add(Operators.NotEndsWith, new ScalarFunctionInfo(new ScalarOverloadInfo(new NotEndsWithOperatorImpl(), ScalarTypes.Bool, ScalarTypes.String, ScalarTypes.String)));
+            operators.Add(Operators.NotEndsWithCs, new ScalarFunctionInfo(new ScalarOverloadInfo(new NotEndsWithCsOperatorImpl(), ScalarTypes.Bool, ScalarTypes.String, ScalarTypes.String)));
         }
 
         public static ScalarOverloadInfo GetOverload(OperatorSymbol symbol, IRExpressionNode[] arguments, List<Parameter> parameters)

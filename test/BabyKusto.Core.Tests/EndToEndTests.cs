@@ -1090,6 +1090,174 @@ True
         }
 
         [Fact]
+        public void BinOp_StringContains()
+        {
+            // Arrange
+            string query = @"
+datatable(v:string)
+[
+    'a',
+    'ac',
+    'bc',
+    'BC',
+]
+| project v = 'abcd' contains v, notV = 'abcd' !contains v
+";
+
+            string expected = @"
+v:bool; notV:bool
+------------------
+True; False
+False; True
+True; False
+True; False
+";
+
+            // Act & Assert
+            Test(query, expected);
+        }
+
+        [Fact]
+        public void BinOp_StringContainsCs()
+        {
+            // Arrange
+            string query = @"
+datatable(v:string)
+[
+    'a',
+    'ac',
+    'bc',
+    'BC',
+]
+| project v = 'abcd' contains_cs v, notV = 'abcd' !contains_cs v
+";
+
+            string expected = @"
+v:bool; notV:bool
+------------------
+True; False
+False; True
+True; False
+False; True
+";
+
+            // Act & Assert
+            Test(query, expected);
+        }
+
+        [Fact]
+        public void BinOp_StringStartsWith()
+        {
+            // Arrange
+            string query = @"
+datatable(v:string)
+[
+    'a',
+    'ab',
+    'ABC',
+    'bc',
+]
+| project v = 'abcd' startswith v, notV = 'abcd' !startswith v
+";
+
+            string expected = @"
+v:bool; notV:bool
+------------------
+True; False
+True; False
+True; False
+False; True
+";
+
+            // Act & Assert
+            Test(query, expected);
+        }
+
+        [Fact]
+        public void BinOp_StringStartsWithCs()
+        {
+            // Arrange
+            string query = @"
+datatable(v:string)
+[
+    'a',
+    'ab',
+    'ABC',
+    'bc',
+]
+| project v = 'abcd' startswith_cs v, notV = 'abcd' !startswith_cs v
+";
+
+            string expected = @"
+v:bool; notV:bool
+------------------
+True; False
+True; False
+False; True
+False; True
+";
+
+            // Act & Assert
+            Test(query, expected);
+        }
+
+        [Fact]
+        public void BinOp_StringEndsWith()
+        {
+            // Arrange
+            string query = @"
+datatable(v:string)
+[
+    'd',
+    'cd',
+    'BCD',
+    'bc',
+]
+| project v = 'abcd' endswith v, notV = 'abcd' !endswith v
+";
+
+            string expected = @"
+v:bool; notV:bool
+------------------
+True; False
+True; False
+True; False
+False; True
+";
+
+            // Act & Assert
+            Test(query, expected);
+        }
+
+        [Fact(Skip = "Kusto library bug, see: https://github.com/microsoft/Kusto-Query-Language/issues/66")]
+        public void BinOp_StringEndsWithCs()
+        {
+            // Arrange
+            string query = @"
+datatable(v:string)
+[
+    'd',
+    'cd',
+    'BCD',
+    'bc',
+]
+| project v = 'abcd' endswith_cs v, notV = 'abcd' !endswith_cs v
+";
+
+            string expected = @"
+v:bool; notV:bool
+------------------
+True; False
+True; False
+False; True
+False; True
+";
+
+            // Act & Assert
+            Test(query, expected);
+        }
+
+        [Fact]
         public void ToScalar_Tabular()
         {
             // Arrange
