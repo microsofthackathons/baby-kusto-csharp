@@ -6,9 +6,9 @@ using Kusto.Language.Symbols;
 
 namespace BabyKusto.Core.Util
 {
-    internal static class ColumnHelpers
+    public static class ColumnHelpers
     {
-        internal static Column CreateFromObjectArray(object[] data, TypeSymbol typeSymbol)
+        public static Column CreateFromObjectArray(object[] data, TypeSymbol typeSymbol)
         {
             if (typeSymbol == ScalarTypes.Int)
             {
@@ -41,7 +41,7 @@ namespace BabyKusto.Core.Util
             }
         }
 
-        internal static Column CreateFromScalar(object value, TypeSymbol typeSymbol, int numRows)
+        public static Column CreateFromScalar(object value, TypeSymbol typeSymbol, int numRows)
         {
             if (typeSymbol == ScalarTypes.Int)
             {
@@ -82,7 +82,7 @@ namespace BabyKusto.Core.Util
             }
         }
 
-        internal static ColumnBuilder CreateBuilder(TypeSymbol typeSymbol)
+        public static ColumnBuilder CreateBuilder(TypeSymbol typeSymbol)
         {
             if (typeSymbol == ScalarTypes.Int)
             {
