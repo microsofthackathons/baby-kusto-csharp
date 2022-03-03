@@ -22,7 +22,8 @@ namespace BabyKusto.Core.Evaluation.BuiltIns
                 new ScalarFunctionInfo(
                     new ScalarOverloadInfo(new UnaryMinusIntOperatorImpl(), ScalarTypes.Int, ScalarTypes.Int),
                     new ScalarOverloadInfo(new UnaryMinusLongOperatorImpl(), ScalarTypes.Long, ScalarTypes.Long),
-                    new ScalarOverloadInfo(new UnaryMinusDoubleOperatorImpl(), ScalarTypes.Real, ScalarTypes.Real)));
+                    new ScalarOverloadInfo(new UnaryMinusDoubleOperatorImpl(), ScalarTypes.Real, ScalarTypes.Real),
+                    new ScalarOverloadInfo(new UnaryMinusTimeSpanOperatorImpl(), ScalarTypes.TimeSpan, ScalarTypes.TimeSpan)));
 
             operators.Add(
                 Operators.Add,
