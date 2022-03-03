@@ -218,6 +218,53 @@ vAvg:real; vCount:long; vSum:real
         }
 
         [Fact]
+        public void BuiltInAggregates_countif()
+        {
+            // Arrange
+            string query = @"
+datatable(a: bool)
+[
+    true, true, false, true
+]
+| summarize v=countif(a)
+";
+
+            string expected = @"
+v:long
+------------------
+3
+";
+
+            // Act & Assert
+            Test(query, expected);
+        }
+
+        [Fact]
+        public void BuiltInAggregates_sumif_Long()
+        {
+            // Arrange
+            string query = @"
+datatable(v:long, include: bool)
+[
+    1, true,
+    2, false,
+    4, true,
+    8, true,
+]
+| summarize v=sumif(v, include)
+";
+
+            string expected = @"
+v:long
+------------------
+13
+";
+
+            // Act & Assert
+            Test(query, expected);
+        }
+
+        [Fact]
         public void Take_Works()
         {
             // Arrange
