@@ -121,6 +121,16 @@ namespace BabyKusto.Core.Evaluation.BuiltIns
                     new ScalarOverloadInfo(new NotEqualStringOperatorImpl(), ScalarTypes.Bool, ScalarTypes.String, ScalarTypes.String),
                     new ScalarOverloadInfo(new NotEqualTimeSpanOperatorImpl(), ScalarTypes.Bool, ScalarTypes.TimeSpan, ScalarTypes.TimeSpan),
                     new ScalarOverloadInfo(new NotEqualDateTimeOperatorImpl(), ScalarTypes.Bool, ScalarTypes.DateTime, ScalarTypes.DateTime)));
+
+            operators.Add(
+                Operators.And,
+                new ScalarFunctionInfo(
+                    new ScalarOverloadInfo(new LogicalAndOperatorImpl(), ScalarTypes.Bool, ScalarTypes.Bool, ScalarTypes.Bool)));
+
+            operators.Add(
+                Operators.Or,
+                new ScalarFunctionInfo(
+                    new ScalarOverloadInfo(new LogicalOrOperatorImpl(), ScalarTypes.Bool, ScalarTypes.Bool, ScalarTypes.Bool)));
         }
 
         public static ScalarOverloadInfo GetOverload(OperatorSymbol symbol, IRExpressionNode[] arguments, List<Parameter> parameters)

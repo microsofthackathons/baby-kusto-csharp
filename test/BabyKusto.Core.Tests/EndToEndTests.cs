@@ -939,6 +939,62 @@ b
         }
 
         [Fact]
+        public void BinOp_LogicalAnd()
+        {
+            // Arrange
+            string query = @"
+datatable(a:bool, b:bool)
+[
+    false, false,
+    false, true,
+    true, false,
+    true, true,
+]
+| project v = a and b
+";
+
+            string expected = @"
+v:bool
+------------------
+False
+False
+False
+True
+";
+
+            // Act & Assert
+            Test(query, expected);
+        }
+
+        [Fact]
+        public void BinOp_LogicalOr()
+        {
+            // Arrange
+            string query = @"
+datatable(a:bool, b:bool)
+[
+    false, false,
+    false, true,
+    true, false,
+    true, true,
+]
+| project v = a or b
+";
+
+            string expected = @"
+v:bool
+------------------
+False
+True
+True
+True
+";
+
+            // Act & Assert
+            Test(query, expected);
+        }
+
+        [Fact]
         public void ToScalar_Tabular()
         {
             // Arrange
