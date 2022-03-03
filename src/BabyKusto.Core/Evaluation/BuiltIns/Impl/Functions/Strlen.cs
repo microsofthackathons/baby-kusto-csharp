@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-using System;
 using System.Diagnostics;
 using Kusto.Language.Symbols;
 
@@ -13,7 +12,7 @@ namespace BabyKusto.Core.Evaluation.BuiltIns.Impl
         {
             Debug.Assert(arguments.Length == 1);
             var text = (string)arguments[0].Value;
-            return new ScalarResult(ScalarTypes.Long, (long)(text ?? String.Empty).Length);
+            return new ScalarResult(ScalarTypes.Long, (long)(text ?? string.Empty).Length);
         }
 
         public ColumnarResult InvokeColumnar(ColumnarResult[] arguments)
@@ -24,7 +23,7 @@ namespace BabyKusto.Core.Evaluation.BuiltIns.Impl
             var data = new long[column.RowCount];
             for (int i = 0; i < column.RowCount; i++)
             {
-                data[i] = (long)(column[i] ?? String.Empty).Length;
+                data[i] = (long)(column[i] ?? string.Empty).Length;
             }
             return new ColumnarResult(Column.Create(ScalarTypes.Long, data));
         }

@@ -84,7 +84,7 @@ namespace BabyKusto.Core.Evaluation.BuiltIns.Impl
         public ScalarResult InvokeScalar(ScalarResult[] arguments)
         {
             Debug.Assert(arguments.Length == 2);
-            return new ScalarResult(ScalarTypes.Bool, (string)arguments[0].Value == (string)arguments[1].Value);
+            return new ScalarResult(ScalarTypes.Bool, ((string)arguments[0].Value ?? string.Empty) == ((string)arguments[1].Value ?? string.Empty));
         }
 
         public ColumnarResult InvokeColumnar(ColumnarResult[] arguments)
@@ -97,7 +97,7 @@ namespace BabyKusto.Core.Evaluation.BuiltIns.Impl
             var data = new bool[left.RowCount];
             for (int i = 0; i < left.RowCount; i++)
             {
-                data[i] = left[i] == right[i];
+                data[i] = (left[i] ?? string.Empty) == (right[i] ?? string.Empty);
             }
             return new ColumnarResult(Column.Create(ScalarTypes.Bool, data));
         }
