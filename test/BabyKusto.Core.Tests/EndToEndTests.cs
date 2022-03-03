@@ -579,6 +579,54 @@ b-456
         }
 
         [Fact]
+        public void BuiltIns_bin_Long()
+        {
+            // Arrange
+            string query = @"
+datatable(a:long, b:long)
+[
+  -1, 3,
+   0, 3,
+   1, 3,
+   2, 3,
+   3, 3,
+   4, 3,
+]
+| project v1 = bin(a, b), v2 = floor(a, b)";
+
+            string expected = @"
+v1:long; v2:long
+------------------
+-3; -3
+0; 0
+0; 0
+0; 0
+3; 3
+3; 3
+";
+
+            // Act & Assert
+            Test(query, expected);
+        }
+
+        [Fact]
+        public void BuiltIns_bin_DateTime()
+        {
+            // Arrange
+            string query = @"
+print v=bin(datetime(2022-03-02 23:04), 1h)";
+
+            string expected = @"
+v:datetime
+------------------
+2022-03-02 23:00:00Z
+";
+
+            // Act & Assert
+            Test(query, expected);
+        }
+
+        [Fact]
         public void UserDefinedFunction1()
         {
             // Arrange
