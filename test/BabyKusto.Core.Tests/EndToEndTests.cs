@@ -1335,6 +1335,25 @@ v:real
             Test(query, expected);
         }
 
+        [Fact]
+        public void AggregateFunctionResultKind()
+        {
+            // Arrange
+            string query = @"
+datatable(a:long) [ 1, 2, 3 ]
+| summarize v=100 * count()
+";
+
+            string expected = @"
+v:long
+------------------
+300
+";
+
+            // Act & Assert
+            Test(query, expected);
+        }
+
         private static void Test(string query, string expectedOutput)
         {
             var engine = new BabyKustoEngine();
