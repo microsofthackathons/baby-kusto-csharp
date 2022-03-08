@@ -3,7 +3,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using BabyKusto.Core;
 using BabyKusto.Core.Evaluation;
 using BabyKusto.Core.Extensions;
@@ -23,45 +22,45 @@ while (true)
     try
     {
         PrintCaret();
-        string query = Console.ReadLine();
+        var query = Console.ReadLine();
+        if (query == null || query == "exit")
+        {
+            return;
+        }
 
         ExecuteReplQuery(query);
     }
     catch (Exception ex)
     {
+        var lastColor = Console.ForegroundColor;
+        Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine("Error:");
         Console.WriteLine(ex);
+        Console.ForegroundColor = lastColor;
     }
 
-    Console.WriteLine("");
+    Console.WriteLine();
 }
 
 static void ShowDemos()
 {
-    ShowDemo1();
-    ShowDemo2();
+    var demos = new[]
+    {
+        (Title: "Example: counting the total number of processes:", Query: @"Processes | count"),
+        (Title: "Example: Find the process using the most memory:", Query: @"Processes | project name, memMB=workingSet/1024/1024 | order by memMB desc | take 1")
+    };
+
+    foreach (var demo in demos)
+    {
+        ShowDemo(demo.Title, demo.Query);
+    }
 }
 
-static void ShowDemo1()
+static void ShowDemo(string title, string query)
 {
-    string query = @"Processes | count";
-
     var lastColor = Console.ForegroundColor;
-    Console.ForegroundColor = ConsoleColor.DarkGray;
-    Console.WriteLine("Example: counting the total number of processes:");
-    Console.ForegroundColor = lastColor;
-    PrintCaret();
-    Console.WriteLine(query);
-    ExecuteReplQuery(query);
-}
-
-static void ShowDemo2()
-{
-    string query = @"Processes | order by numThreads desc | take 1";
-
-    var lastColor = Console.ForegroundColor;
-    Console.ForegroundColor = ConsoleColor.DarkGray;
-    Console.WriteLine("Example: Find the process with the most number of threads:");
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.WriteLine(title);
     Console.ForegroundColor = lastColor;
     PrintCaret();
     Console.WriteLine(query);
@@ -73,22 +72,23 @@ static void ExecuteReplQuery(string query)
     var processesTable = GetProcessesTable();
     var engine = new BabyKustoEngine();
     engine.AddGlobalTable("Processes", processesTable);
-    var result = engine.Evaluate(query, dumpIRTree: true);
+    var result = engine.Evaluate(query, dumpIRTree: true); // Set dumpIRTree = true to see the internal tree representation
 
     Console.WriteLine();
 
     if (result is TabularResult tabularResult)
     {
-        Console.WriteLine("Result:");
-        tabularResult.Value.Dump(Console.Out, indent: 4);
+        tabularResult.Value.Dump(Console.Out);
     }
+
+    Console.WriteLine();
 }
 
 static InMemoryTableSource GetProcessesTable()
 {
-    var names = new ColumnBuilder<string>(ScalarTypes.String);
-    var numThreads = new ColumnBuilder<int>(ScalarTypes.Int);
-    var workingSets = new ColumnBuilder<long>(ScalarTypes.Long);
+    var names = new ColumnBuilder<string?>(ScalarTypes.String);
+    var numThreads = new ColumnBuilder<int?>(ScalarTypes.Int);
+    var workingSets = new ColumnBuilder<long?>(ScalarTypes.Long);
 
     foreach (var p in Process.GetProcesses())
     {
