@@ -2,9 +2,11 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Diagnostics;
 using BabyKusto.Core;
 using BabyKusto.Core.Evaluation;
 using BabyKusto.Core.Extensions;
+using BabyKusto.Core.Util;
 using Kusto.Language.Symbols;
 
 Console.WriteLine("-----------------------------------------------------------------------");
@@ -12,39 +14,63 @@ Console.WriteLine("Welcome to BabyKusto, the little self-contained Kusto executi
 Console.WriteLine("-----------------------------------------------------------------------");
 Console.WriteLine();
 
-var query = @"
-let c=100.0;
-MyTable
-| where AppMachine == 'vm1'
-| project frac=CounterValue/c, AppMachine, CounterName
-| summarize avg(frac) by CounterName
-";
-
-var myTable = new InMemoryTableSource(
-    TableSymbol.From("(AppMachine:string, CounterName:string, CounterValue:real)").WithName("MyTable"),
-    new Column[]
-    {
-        Column.Create(ScalarTypes.String, new [] { "vm0", "vm0", "vm1", "vm1", "vm2" }),
-        Column.Create(ScalarTypes.String, new [] { "cpu", "mem", "cpu", "mem", "cpu" }),
-        Column.Create(ScalarTypes.Real, new double?[] { 50.0, 30.0, 20.0, 5.0, 100.0 }),
-    });
-
-Console.WriteLine("MyTable:");
-myTable.Dump(Console.Out, indent: 4);
-Console.WriteLine();
-
-Console.WriteLine("Query:");
-Console.WriteLine(query.Trim());
-Console.WriteLine();
-
-var engine = new BabyKustoEngine();
-engine.AddGlobalTable("MyTable", myTable);
-var result = engine.Evaluate(query, dumpIRTree: true);
-
-Console.WriteLine();
-Console.WriteLine("Result:");
-
-if (result is TabularResult tabularResult)
+while (true)
 {
-    tabularResult.Value.Dump(Console.Out, indent: 4);
+    try
+    {
+        Console.Write("> ");
+        string query = Console.ReadLine();
+
+        var processesTable = GetProcessesTable();
+        var engine = new BabyKustoEngine();
+        engine.AddGlobalTable("Processes", processesTable);
+        var result = engine.Evaluate(query, dumpIRTree: true);
+
+        Console.WriteLine();
+
+        if (result is TabularResult tabularResult)
+        {
+            Console.WriteLine("Result:");
+            tabularResult.Value.Dump(Console.Out, indent: 4);
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Error:");
+        Console.WriteLine(ex);
+    }
+
+    Console.WriteLine("");
+}
+
+static InMemoryTableSource GetProcessesTable()
+{
+    var names = new ColumnBuilder<string>(ScalarTypes.String);
+    var numThreads = new ColumnBuilder<int>(ScalarTypes.Int);
+    var workingSets = new ColumnBuilder<long>(ScalarTypes.Long);
+
+    foreach (var p in Process.GetProcesses())
+    {
+        string processName;
+        int processThreads;
+        long workingSet;
+        try
+        {
+            processName = p.ProcessName;
+            processThreads = p.Threads.Count;
+            workingSet = p.WorkingSet64;
+        }
+        catch { continue; }
+
+        names.Add(processName);
+        numThreads.Add(processThreads);
+        workingSets.Add(workingSet);
+    }
+
+    var tableSymbol = TableSymbol.From("(name:string, numThreads:int, workingSet:long)").WithName("Processes");
+
+    var myTable = new InMemoryTableSource(
+        tableSymbol,
+        new Column[] { names.ToColumn(), numThreads.ToColumn(), workingSets.ToColumn() });
+    return myTable;
 }
