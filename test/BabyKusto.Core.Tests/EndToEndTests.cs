@@ -872,7 +872,7 @@ v:datetime
             Test(query, expected);
         }
 
-        [Fact(Skip = "We don't support type narrowing yet")]
+        [Fact(Skip = "See: https://github.com/microsoft/Kusto-Query-Language/issues/67")]
         public void BuiltIns_bin_Narrowing()
         {
             // Arrange
@@ -881,7 +881,7 @@ datatable(a:int) [ 9, 10, 11 ]
 | project v = bin(a, 10)";
 
             string expected = @"
-v:int
+v:long
 ------------------
 0
 10
