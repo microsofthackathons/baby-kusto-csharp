@@ -872,6 +872,26 @@ v:datetime
             Test(query, expected);
         }
 
+        [Fact(Skip = "We don't support type narrowing yet")]
+        public void BuiltIns_bin_Narrowing()
+        {
+            // Arrange
+            string query = @"
+datatable(a:int) [ 9, 10, 11 ]
+| project v = bin(a, 10)";
+
+            string expected = @"
+v:int
+------------------
+0
+10
+10
+";
+
+            // Act & Assert
+            Test(query, expected);
+        }
+
         [Fact]
         public void UserDefinedFunction1()
         {
